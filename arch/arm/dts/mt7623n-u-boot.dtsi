@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (c) 2019 MediaTek Inc.
+ * Author: Sam Shih <sam.shih@mediatek.com>
+ */
+
+/ {};
+
+&topckgen {
+	bootph-all;
+};
+
+&topckgen {
+	bootph-all;
+};
+
+&pericfg {
+	bootph-all;
+};
+
+&timer {
+	bootph-all;
+};
+
+&apmixedsys {
+	bootph-all;
+};
+
+&uart2 {
+	bootph-all;
+	reg-shift = <2>;
+	//linux use <&pericfg CLK_PERI_UART2_SEL> as first clock
+	clocks = <&topckgen CLK_TOP_UART_SEL>,
+		 <&pericfg CLK_PERI_UART2>;
+};
