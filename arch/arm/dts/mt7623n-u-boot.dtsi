@@ -1,0 +1,39 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (c) 2019 MediaTek Inc.
+ * Author: Sam Shih <sam.shih@mediatek.com>
+ */
+
+/ {
+	timer0: timer@10008000 {
+		compatible = "mediatek,timer";
+		reg = <0 0x10008000 0 0x80>;
+		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>;
+		clocks = <&system_clk>;
+		clock-names = "system-clk";
+	};
+};
+
+&topckgen {
+	bootph-all;
+};
+
+&pericfg {
+	bootph-all;
+};
+
+&timer {
+	bootph-all;
+};
+
+&apmixedsys {
+	bootph-all;
+};
+
+&uart2 {
+	bootph-all;
+	reg-shift = <2>;
+	//linux use <&pericfg CLK_PERI_UART2_SEL> as first clock
+	clocks = <&topckgen CLK_TOP_UART_SEL>,
+		 <&pericfg CLK_PERI_UART2>;
+};
