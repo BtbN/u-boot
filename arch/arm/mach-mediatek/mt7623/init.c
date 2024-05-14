@@ -42,6 +42,22 @@ int dram_init(void)
 	return 0;
 }
 
+#include <asm/io.h>
+//#include <asm/addrspace.h>
+#define SYSCTL_BASE		0x11000000
+#define SYSCTL_SIZE		0x100
+#define SYSCTL_GPIOMODE_REG	0x60
+#define UART2_MODE		0x4
+
+void board_debug_uart_init(void)
+{
+	void __iomem *base = ioremap/*_nocache*/(SYSCTL_BASE, SYSCTL_SIZE);
+
+#if CONFIG_DEBUG_UART_BASE == 0x11004000 /* KSEG1ADDR(UART2_BASE) */
+	//clrbits_32(base + SYSCTL_GPIOMODE_REG, UART2_MODE);
+#endif
+}
+
 int print_cpuinfo(void)
 {
 	void __iomem *chipid;
