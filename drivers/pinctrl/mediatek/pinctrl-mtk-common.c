@@ -763,15 +763,18 @@ static int mtk_gpiochip_register(struct udevice *parent)
 		return -ENOENT;
 
 	ret = -ENOENT;
-	dev_for_each_subnode(node, parent)
-		if (ofnode_read_bool(node, "gpio-controller")) {
-			ret = 0;
-			break;
-		}
+	node = dev_ofnode(parent);
+	if (!ofnode_read_bool(node, "gpio-controller"))
+	{
+		dev_for_each_subnode(node, parent)
+			if (ofnode_read_bool(node, "gpio-controller")) {
+				ret = 0;
+				break;
+			}
 
-	if (ret)
-		return ret;
-
+		if (ret)
+			return ret;
+	}
 	ret = device_bind_with_driver_data(parent, &mtk_gpio_driver,
 					   "mediatek_gpio", 0, node,
 					   &dev);
