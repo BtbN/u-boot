@@ -68,7 +68,7 @@
 	};
 };
 
-&eth {
+/*&eth {
 	status = "okay";
 	mediatek,gmac-id = <0>;
 	phy-mode = "rgmii";
@@ -79,7 +79,7 @@
 		speed = <1000>;
 		full-duplex;
 	};
-};
+};*/
 
 &mmc0 {
 	pinctrl-names = "default";
@@ -209,7 +209,7 @@
 	};
 };
 
-&pcie {
+/*&pcie {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pcie_default>;
 	status = "okay";
@@ -229,7 +229,7 @@
 
 &pcie1_phy {
 	status = "okay";
-};
+};*/
 
 &uart0 {
 	pinctrl-names = "default";
@@ -249,7 +249,7 @@
 	status = "okay";
 };
 
-&usb1 {
+/*&usb1 {
 	status = "okay";
 };
 
@@ -263,4 +263,4 @@
 
 &u3phy2 {
 	status = "okay";
-};
+};*/
