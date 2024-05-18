@@ -123,33 +123,17 @@
 		#reset-cells = <1>;
 	};
 
-	/*pinctrl: pinctrl@10005000 {
-		compatible = "mediatek,mt7623-pinctrl";
-		reg = <0 0x10005000 0 0x1000>;
-
-		gpio: gpio-controller {
-			gpio-controller;
-			#gpio-cells = <2>;
-		};
-	};*/
-
-	//mainline pinctrl node renamed from pio to pinctrl
-	pinctrl: pinctrl@10005000 {
+	gpio: pinctrl@10005000 {
 		compatible = "mediatek,mt7623-pinctrl";
 		reg = <0 0x1000b000 0 0x1000>;
 		//mediatek,pctl-regmap = <&syscfg_pctl_a>;
-		//gpio-controller;
-		//#gpio-cells = <2>;
+		gpio-controller;
+		#gpio-cells = <2>;
 		interrupt-controller;
 		interrupt-parent = <&gic>;
 		#interrupt-cells = <2>;
 		interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
 			     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-
-		gpio: gpio-controller {
-			gpio-controller;
-			#gpio-cells = <2>;
-		};
 	};
 
 	scpsys: scpsys@10006000 {
