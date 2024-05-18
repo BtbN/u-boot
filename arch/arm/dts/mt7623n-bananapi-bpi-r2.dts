@@ -249,7 +249,7 @@
 	status = "okay";
 };
 
-/*&usb1 {
+&usb1 {
 	status = "okay";
 };
 
@@ -263,4 +263,4 @@
 
 &u3phy2 {
 	status = "okay";
-};*/
+};
