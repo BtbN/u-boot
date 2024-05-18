@@ -191,46 +191,48 @@
 	};
 
 	uart0: serial@11002000 {
-		compatible = "mediatek,hsuart";
+		compatible = "mediatek,mt7623-uart",
+			     "mediatek,mt6577-uart";//this compatible is already in drivers/serial/serial_mtk.c
 		reg = <0 0x11002000 0 0x400>;
-		reg-shift = <2>;
+		reg-shift = <2>;//only in uboot
 		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>;
-		clocks = <&topckgen CLK_TOP_UART_SEL>,
+		clocks = <&topckgen CLK_TOP_UART_SEL>,//<&pericfg CLK_PERI_UART0_SEL>,
 			 <&pericfg CLK_PERI_UART0>;
 		clock-names = "baud", "bus";
 		status = "disabled";
 	};
 
 	uart1: serial@11003000 {
-		compatible = "mediatek,hsuart";
+		compatible = "mediatek,mt7623-uart",
+			     "mediatek,mt6577-uart";
 		reg = <0 0x11003000 0 0x400>;
-		reg-shift = <2>;
+		reg-shift = <2>; //only in uboot
 		interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
-		clocks = <&topckgen CLK_TOP_UART_SEL>,
+		clocks = <&topckgen CLK_TOP_UART_SEL>,//<&pericfg CLK_PERI_UART1_SEL>,
 			 <&pericfg CLK_PERI_UART1>;
 		clock-names = "baud", "bus";
 		status = "disabled";
 	};
 
 	uart2: serial@11004000 {
-		compatible = "mediatek,hsuart";
+		compatible = "mediatek,mt7623-uart",
+			     "mediatek,mt6577-uart";
 		reg = <0 0x11004000 0 0x400>;
-		reg-shift = <2>;
+		reg-shift = <2>;//only in uboot
 		interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_LOW>;
-		clocks = <&topckgen CLK_TOP_UART_SEL>,
+		clocks = <&topckgen CLK_TOP_UART_SEL>,//<&pericfg CLK_PERI_UART2_SEL>,
 			 <&pericfg CLK_PERI_UART2>;
 		clock-names = "baud", "bus";
 		status = "disabled";
 	};
 
 	uart3: serial@11005000 {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		compatible = "mediatek,hsuart";
+		compatible = "mediatek,mt7623-uart",
+			     "mediatek,mt6577-uart";
 		reg = <0 0x11005000 0 0x400>;
-		reg-shift = <2>;
+		reg-shift = <2>;//only in uboot
 		interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_LOW>;
-		clocks = <&topckgen CLK_TOP_UART_SEL>,
+		clocks = <&topckgen CLK_TOP_UART_SEL>,//<&pericfg CLK_PERI_UART3_SEL>,
 			 <&pericfg CLK_PERI_UART3>;
 		clock-names = "baud", "bus";
 		status = "disabled";
