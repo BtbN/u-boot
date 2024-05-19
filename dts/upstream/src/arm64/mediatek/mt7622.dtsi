@@ -72,8 +72,8 @@
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x0 0x0>;
-			clocks = <&infracfg CLK_INFRA_MUX1_SEL>,
-				 <&apmixedsys CLK_APMIXED_MAIN_CORE_EN>;
+			//clocks = <&infracfg CLK_INFRA_MUX1_SEL>,
+			//	 <&apmixedsys CLK_APMIXED_MAIN_CORE_EN>;
 			clock-names = "cpu", "intermediate";
 			operating-points-v2 = <&cpu_opp_table>;
 			#cooling-cells = <2>;
@@ -87,8 +87,8 @@
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x0 0x1>;
-			clocks = <&infracfg CLK_INFRA_MUX1_SEL>,
-				 <&apmixedsys CLK_APMIXED_MAIN_CORE_EN>;
+			//clocks = <&infracfg CLK_INFRA_MUX1_SEL>,
+			//	 <&apmixedsys CLK_APMIXED_MAIN_CORE_EN>;
 			clock-names = "cpu", "intermediate";
 			operating-points-v2 = <&cpu_opp_table>;
 			#cooling-cells = <2>;
@@ -599,7 +599,7 @@
 		status = "disabled";
 	};
 
-	uart4: serial@11019000 {
+	/*uart4: serial@11019000 {
 		compatible = "mediatek,mt7622-uart",
 			     "mediatek,mt6577-uart";
 		reg = <0 0x11019000 0 0x400>;
@@ -608,9 +608,9 @@
 			 <&pericfg CLK_PERI_UART4_PD>;
 		clock-names = "baud", "bus";
 		status = "disabled";
-	};
+	};*/
 
-	audsys: clock-controller@11220000 {
+	/*audsys: clock-controller@11220000 {
 		compatible = "mediatek,mt7622-audsys", "syscon";
 		reg = <0 0x11220000 0 0x2000>;
 		#clock-cells = <1>;
@@ -697,7 +697,7 @@
 						 <&topckgen CLK_TOP_AUD2PLL>;
 			assigned-clock-rates = <0>, <0>, <49152000>, <45158400>;
 		};
-	};
+	};*/
 
 	mmc0: mmc@11230000 {
 		compatible = "mediatek,mt7622-mmc";
