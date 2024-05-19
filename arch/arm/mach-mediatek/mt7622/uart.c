@@ -1,4 +1,4 @@
-#include "mmio.h"
+#include <asm/io.h>
 
 // MT7988
 // #define UART_BASE						0x11000000
@@ -28,8 +28,8 @@
 #define UART_LSR_DR						(0x01)	/* Data ready */
 #define UART_LSR_THRE					(0x20)	/* Xmit holding register empty */
 
-#define UART_WRITE_REG(offset, val)		mmio_write_32(UART_BASE + (offset), val)
-#define UART_READ_REG(offset)			mmio_read_32(UART_BASE + (offset))
+#define UART_WRITE_REG(offset, val)		setbits_32(UART_BASE + (offset), val)
+#define UART_READ_REG(offset)			readl(UART_BASE + (offset))
 
 #define QUOT_VAL						((UART_CLK / (0xff * UART_BAUD)) + 1)
 #define SAMPLE_COUNT_VAL				((UART_CLK / (UART_BAUD * QUOT_VAL)) - 1)
