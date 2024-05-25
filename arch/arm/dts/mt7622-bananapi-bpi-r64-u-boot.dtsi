@@ -5,11 +5,7 @@
  */
 
 / {
-	chosen {
-		stdout-path = &uart0;
-		tick-timer = &timer0;
-	};
-
+	//mt7622
 	timer0: timer@10004000 {
 		compatible = "mediatek,timer";
 		reg = <0 0x10004000 0 0x80>;
@@ -17,9 +13,19 @@
 		clocks = <&infracfg CLK_INFRA_APXGPT_PD>;
 		clock-names = "system-clk";
 	};
+	//r64
+	chosen {
+		stdout-path = &uart0;
+		tick-timer = &timer0;
+	};
 };
 
 &eth {
+	//mt7622
+	//resets = <&ethsys ETHSYS_FE_RST>; //original mt7622.dtsi, wonder why it compiles :p
+	resets = <&ethsys MT7622_ETHSYS_FE_RST>; //defined in mt7622-reset.h
+	reset-names = "fe";
+	//r64
 	status = "okay";
 	mediatek,gmac-id = <0>;
 	phy-mode = "2500base-x";
