@@ -11,7 +11,7 @@
 /* INFRACFG */
 
 #define CK_INFRA_CK_F26M		0
-#define CK_INFRA_UART			1
+#define CLK_INFRA_UART			1
 #define CK_INFRA_ISPI0			2
 #define CK_INFRA_I2C			3
 #define CK_INFRA_ISPI1			4
@@ -52,7 +52,7 @@
 /* TOPCKGEN */
 #define CLK_TOP_XTAL			0 //use same value as CLK_XTAL defined in clk-mtk.h
 
-#define CK_TOP_CB_CKSQ_40M		0
+#define CLK_TOP_CB_CKSQ_40M		0
 #define CK_TOP_CB_M_416M		1
 #define CLK_TOP_MPLL_D2			2
 #define CK_TOP_CB_M_D4			3
