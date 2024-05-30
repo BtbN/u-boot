@@ -81,6 +81,7 @@
 };
 
 &pio {
+	compatible = "mediatek,mt7986-pinctrl"; //pinctrl driver expects no "a"
 	bootph-all;
 };
 
