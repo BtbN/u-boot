@@ -4,7 +4,11 @@
  * Author: Frank Wunderlich <frank-w@public-files.de>
  */
 
+#include <dt-bindings/reset/mt7629-reset.h>
+#include <dt-bindings/gpio/gpio.h> //for mmc
+
 /delete-node/ &infracfg;
+/delete-node/ &mmc0_pins_default;
 / {
 	memory@40000000 {
 		device_type = "memory";
@@ -58,6 +62,16 @@
 		reg = <0 0x8000000 0 0x1000>;
 		bootph-all;
 	};
+
+	//emmc regulator
+	reg_1p8v: regulator-1p8v {
+		compatible = "regulator-fixed";
+		regulator-name = "fixed-1.8V";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
 };
 
 &cpu0 {
@@ -91,16 +105,57 @@
 	assigned-clock-parents = <&topckgen CLK_TOP_CB_CKSQ_40M>,
 				 <&infracfg CLK_INFRA_UART>;
 	mediatek,force-highspeed;
-	status = "disabled";
 	bootph-all;
 };
 
 &pio {
 	compatible = "mediatek,mt7986-pinctrl"; //pinctrl driver expects no "a"
 	bootph-all;
+
+	mmc0_pins_default: mmc0default {
+		mux {
+			function = "flash";
+			groups =  "emmc_51";
+		};
+
+		conf-cmd-dat {
+			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
+			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
+			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
+			input-enable;
+			drive-strength = <MTK_DRIVE_4mA>;
+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+		};
+
+		conf-clk {
+			pins = "EMMC_CK";
+			drive-strength = <MTK_DRIVE_6mA>;
+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
+		};
+
+		conf-dsl {
+			pins = "EMMC_DSL";
+			bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
+		};
+
+		conf-rst {
+			pins = "EMMC_RSTB";
+			drive-strength = <MTK_DRIVE_4mA>;
+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+		};
+	};
 };
 
 &eth {
+	//soc
+	resets = <&ethsys ETHSYS_FE_RST>; //const taken from mt7629-reset.h
+	reset-names = "fe";
+	mediatek,sgmiisys = <&sgmiisys0>;
+	/delete-property/ clocks;
+	/delete-property/ clock-names;
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	//board
 	status = "okay";
 	mediatek,gmac-id = <0>;
 	phy-mode = "2500base-x";
@@ -112,3 +167,59 @@
 		full-duplex;
 	};
 };
+
+//front-usb
+&u3port0 {
+	clocks = <&dummy_clk>;
+	clock-names = "ref";
+};
+
+&ssusb {
+	clocks = <&dummy_clk>,
+		 <&dummy_clk>,
+		 <&dummy_clk>,
+		 <&dummy_clk>,
+		 <&dummy_clk>;
+	tpl-support;
+};
+
+//fix clocks for mmc0 (mt7986.dtsi)
+&mmc0 {
+	clocks = <&topckgen CK_TOP_EMMC_416M>,
+		<&topckgen CK_TOP_EMMC_250M>,
+		<&infracfg_ao CLK_INFRA_MSDC_CK>;
+	assigned-clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
+			  <&topckgen CLK_TOP_EMMC_250M_SEL>;
+	assigned-clock-parents = <&topckgen CK_TOP_CB_M_416M>,
+				 <&topckgen CLK_TOP_NET1PLL_D5_D2>;
+	clock-names = "source", "hclk", "source_cg";
+};
+
+//mmc needs either sd or emmc config, dtso support is not yet in uboot
+//we can create nodes/properties by code, but how to probe for sd/emmc??
+&mmc0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins_default>;
+	bus-width = <4>;
+	max-frequency = <52000000>;
+	cap-sd-highspeed;
+	r_smpl = <1>;
+	vmmc-supply = <&reg_3p3v>;
+	vqmmc-supply = <&reg_3p3v>;
+	status = "okay";
+};
+/*
+//emmc:
+&mmc0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins_default>;
+	bus-width = <8>;
+	max-frequency = <200000000>;
+	cap-mmc-highspeed;
+	cap-mmc-hw-reset;
+	vmmc-supply = <&reg_3p3v>;
+	vqmmc-supply = <&reg_1p8v>;
+	non-removable;
+	status = "okay";
+};
+*/
