@@ -6,6 +6,11 @@
 
 /delete-node/ &infracfg;
 / {
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0 0x40000000 0 0x10000000>;
+	};
+
 	timer0: timer@10008000 {
 		compatible = "mediatek,mt7986-timer";
 		reg = <0 0x10008000 0 0x1000>;
@@ -45,9 +50,19 @@
 		reg = <0 0x10001000 0 0x1000>;
 		clock-parent = <&topckgen>;
 		#clock-cells = <1>;
+		bootph-all;
+	};
+
+	hwver: hwver {
+		compatible = "mediatek,hwver", "syscon";
+		reg = <0 0x8000000 0 0x1000>;
+		bootph-all;
 	};
 };
 
+&cpu0 {
+	mediatek,hwver = <&hwver>;
+};
 //old mt7686-u-boot.dtsi and new mt7686a-u-boot.dtsi are not used
 &topckgen {
 	clock-parent = <&fixed_plls>;
