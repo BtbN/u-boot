@@ -43,19 +43,53 @@ int dram_init(void)
 }
 
 #include <asm/io.h>
-//#include <asm/addrspace.h>
-#define SYSCTL_BASE		0x11000000
-#define SYSCTL_SIZE		0x100
-#define SYSCTL_GPIOMODE_REG	0x60
-#define UART2_MODE		0x4
+
+#define UART_BASE				0x11004000 //uart2 maybe use CONFIG_DEBUG_UART_BASE
+#define UART_BAUD				115200
+
+// Real XTAL
+#define UART_CLK				25000000 //mt7623 use 25MHz
+
+#define UART_RBR				(0x0)
+#define UART_THR				(0x0)
+#define UART_DLL				(0x0)
+#define UART_DLH				(0x4)
+#define UART_IER				(0x4)
+#define UART_LCR				(0xc)
+#define UART_LSR				(0x14)
+#define UART_HIGHSPEED				(0x24)
+#define UART_SAMPLE_COUNT			(0x28)
+#define UART_SAMPLE_POINT			(0x2c)
+
+#define UART_LSR_DR				(0x01)	/* Data ready */
+#define UART_LSR_THRE				(0x20)	/* Xmit holding register empty */
+
+#define UART_WRITE_REG(offset, val)		setbits_32(UART_BASE + (offset), val)
+#define UART_READ_REG(offset)			readl(UART_BASE + (offset))
+
+#define QUOT_VAL				((UART_CLK / (0xff * UART_BAUD)) + 1)
+#define SAMPLE_COUNT_VAL			((UART_CLK / (UART_BAUD * QUOT_VAL)) - 1)
+#define SAMPLE_POINT_VAL			((SAMPLE_COUNT_VAL - 1) / 2)
+
 
 void board_debug_uart_init(void)
 {
-	void __iomem *base = ioremap/*_nocache*/(SYSCTL_BASE, SYSCTL_SIZE);
+	int tmp;
 
-#if CONFIG_DEBUG_UART_BASE == 0x11004000 /* KSEG1ADDR(UART2_BASE) */
-	//clrbits_32(base + SYSCTL_GPIOMODE_REG, UART2_MODE);
-#endif
+	UART_WRITE_REG(UART_HIGHSPEED, 0x3);
+
+	tmp = UART_READ_REG(UART_LCR);
+	tmp |= (1<<7);
+	UART_WRITE_REG(UART_LCR, tmp);
+
+	UART_WRITE_REG(UART_THR, QUOT_VAL);
+	UART_WRITE_REG(UART_IER, 0x0);
+	UART_WRITE_REG(UART_SAMPLE_COUNT, SAMPLE_COUNT_VAL);
+	UART_WRITE_REG(UART_SAMPLE_POINT, SAMPLE_POINT_VAL);
+
+	tmp = UART_READ_REG(UART_LCR);
+	tmp &= ~(1<<7);
+	UART_WRITE_REG(UART_LCR, tmp);
 }
 
 int print_cpuinfo(void)
