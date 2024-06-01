@@ -4,7 +4,20 @@
  * Author: Sam Shih <sam.shih@mediatek.com>
  */
 
-/ {};
+/ {
+	timer0: timer@10008000 {
+		compatible = "mediatek,timer";
+		reg = <0 0x10008000 0 0x80>;
+		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>;
+		clocks = <&system_clk>;
+		clock-names = "system-clk";
+	};
+
+	wdt-reboot {
+		compatible = "wdt-reboot";
+		wdt = <&watchdog>;
+	};
+};
 
 &topckgen {
 	bootph-all;
@@ -24,6 +37,14 @@
 
 &apmixedsys {
 	bootph-all;
+};
+
+&pio {
+	reg = <0 0x10005000 0 0x1000>; // linux uses 0x1000b000 here but name it 0x10005000
+};
+
+&watchdog {
+	compatible = "mediatek,wdt";
 };
 
 &uart2 {

@@ -5,6 +5,28 @@
 
 #include "mt7623n-u-boot.dtsi"
 
+/{
+	chosen {
+		stdout-path = &uart2;
+		tick-timer = &timer0;
+	};
+};
+
+&pio {
+	uart2_pins_a: uart2-default {
+		mux {
+			function = "uart";
+			groups =  "uart2_0_txd_rxd";
+		};
+	};
+};
+
+&uart2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins_a>;
+	status = "okay";
+};
+
 &eth {
 	status = "okay";
 	mediatek,gmac-id = <0>;
