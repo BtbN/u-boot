@@ -11,6 +11,7 @@
 #include <command.h>
 #include <common.h>
 #include <console.h>
+#include <status_led.h>
 #if CONFIG_IS_ENABLED(CMD_MTD_OTP)
 #include <hexdump.h>
 #endif
@@ -559,6 +560,12 @@ static int do_mtd_io(struct cmd_tbl *cmdtp, int flag, int argc,
 	while (mtd_block_isbad(mtd, off))
 		off += mtd->erasesize;
 
+#ifdef CONFIG_LED_STATUS_ACTIVITY_ENABLE
+	if (!read)
+		status_led_set(CONFIG_LED_STATUS_ACTIVITY,
+			       CONFIG_LED_STATUS_BLINKING);
+#endif
+
 	/* Loop over the pages to do the actual read/write */
 	while (remaining) {
 		/* Skip the block if it is bad */
@@ -585,6 +592,12 @@ static int do_mtd_io(struct cmd_tbl *cmdtp, int flag, int argc,
 		io_op.datbuf += io_op.retlen;
 		io_op.oobbuf += io_op.oobretlen;
 	}
+
+#ifdef CONFIG_LED_STATUS_ACTIVITY_ENABLE
+	if (!read)
+		status_led_set(CONFIG_LED_STATUS_ACTIVITY,
+			       CONFIG_LED_STATUS_OFF);
+#endif
 
 	if (!ret && dump)
 		mtd_dump_device_buf(mtd, start_off, buf, len, woob);
@@ -653,6 +666,11 @@ static int do_mtd_erase(struct cmd_tbl *cmdtp, int flag, int argc,
 	erase_op.addr = off;
 	erase_op.len = mtd->erasesize;
 
+#ifdef CONFIG_LED_STATUS_ACTIVITY_ENABLE
+	status_led_set(CONFIG_LED_STATUS_ACTIVITY,
+		       CONFIG_LED_STATUS_ON);
+#endif
+
 	while (len) {
 		if (!scrub) {
 			ret = mtd_block_isbad(mtd, erase_op.addr);
@@ -680,6 +698,11 @@ static int do_mtd_erase(struct cmd_tbl *cmdtp, int flag, int argc,
 		len -= mtd->erasesize;
 		erase_op.addr += mtd->erasesize;
 	}
+
+#ifdef CONFIG_LED_STATUS_ACTIVITY_ENABLE
+	status_led_set(CONFIG_LED_STATUS_ACTIVITY,
+		       CONFIG_LED_STATUS_OFF);
+#endif
 
 	if (ret && ret != -EIO)
 		ret = CMD_RET_FAILURE;
