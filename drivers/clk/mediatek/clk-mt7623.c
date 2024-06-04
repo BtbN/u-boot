@@ -904,7 +904,7 @@ static const struct mtk_gate hif_cgs[] = {
 static const struct mtk_clk_tree mt7623_clk_tree = {
 	.xtal_rate = 26 * MHZ,
 	.xtal2_rate = 26 * MHZ,
-	.id_offs_map = top_id_offs_map;
+	.id_offs_map = top_id_offs_map,
 	.fdivs_offs = CLK_TOP_SYSPLL,
 	.muxes_offs = CLK_TOP_AXI_SEL,
 	.plls = apmixed_plls,
@@ -951,7 +951,7 @@ static int mt7623_topckgen_probe(struct udevice *dev)
 
 static const struct mtk_clk_tree mt7623_clk_gate_tree = {
 	/* Each CLK ID for gates clock starts at index 1 */
-	.gates_offs = 1;
+	.gates_offs = 1,
 };
 
 static int mt7623_infracfg_probe(struct udevice *dev)
