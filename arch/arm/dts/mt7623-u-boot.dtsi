@@ -4,6 +4,17 @@
  * Author: Sam Shih <sam.shih@mediatek.com>
  */
 
+/ {
+	timer0: timer@10008000 {
+		compatible = "mediatek,timer";
+		reg = <0 0x10008000 0 0x80>;
+		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>;
+		clocks = <&system_clk>;
+		clock-names = "system-clk";
+		bootph-all;
+	};
+};
+
 &topckgen {
 	bootph-all;
 };
@@ -13,10 +24,6 @@
 };
 
 &pericfg {
-	bootph-all;
-};
-
-&timer0 {
 	bootph-all;
 };
 
