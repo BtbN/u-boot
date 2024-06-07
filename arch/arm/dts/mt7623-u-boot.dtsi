@@ -18,6 +18,11 @@
 		stdout-path = &uart2;
 		tick-timer = &timer0;
 	};
+
+	wdt-reboot {
+		compatible = "wdt-reboot";
+		wdt = <&watchdog>;
+	};
 };
 
 /delete-node/ &bls;
@@ -130,4 +135,9 @@
 	bootph-all;
 	//delete-property/ clocks;
 	//delete-property/ clock-names;
+};
+
+&pio {
+	bootph-all;
+	reg = <0 0x10005000 0 0x1000>;
 };
