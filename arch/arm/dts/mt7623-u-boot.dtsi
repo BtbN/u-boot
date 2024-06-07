@@ -13,6 +13,11 @@
 		clock-names = "system-clk";
 		bootph-all;
 	};
+
+	chosen {
+		stdout-path = &uart2;
+		tick-timer = &timer0;
+	};
 };
 
 /delete-node/ &bls;
@@ -79,15 +84,15 @@
 /delete-node/ &nor_flash;
 /delete-node/ &pwrap;
 
-/delete-node/ &infracfg;
-/*&infracfg {
+//delete-node/ &infracfg;
+&infracfg {
 	bootph-all;
-};*/
+};
 
-/delete-node/ &topckgen;
-/*&topckgen {
+//delete-node/ &topckgen;
+&topckgen {
 	bootph-all;
-};*/
+};
 
 &cpu0{
 	/delete-property/ clocks;
@@ -123,6 +128,6 @@
 
 &uart2 {
 	bootph-all;
-	/delete-property/ clocks;
-	/delete-property/ clock-names;
+	//delete-property/ clocks;
+	//delete-property/ clock-names;
 };
