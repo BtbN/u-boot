@@ -1014,6 +1014,8 @@ static int mt7623_mcucfg_probe(struct udevice *dev)
 {
 	void __iomem *base;
 
+	printf("%s\n", __func__);
+
 	base = dev_read_addr_ptr(dev);
 	if (!base)
 		return -ENOENT;
@@ -1029,6 +1031,8 @@ static int mt7623_apmixedsys_probe(struct udevice *dev)
 	struct mtk_clk_priv *priv = dev_get_priv(dev);
 	int ret;
 
+	printf("%s\n", __func__);
+
 	ret = mtk_common_clk_init(dev, &mt7623_apmixedsys_clk_tree);
 	if (ret)
 		return ret;
@@ -1043,6 +1047,8 @@ static int mt7623_apmixedsys_probe(struct udevice *dev)
 
 static int mt7623_topckgen_probe(struct udevice *dev)
 {
+	printf("%s\n", __func__);
+
 	return mtk_common_clk_init(dev, &mt7623_topckgen_clk_tree);
 }
 
@@ -1054,6 +1060,8 @@ static const struct mtk_clk_tree mt7623_clk_gate_tree = {
 
 static int mt7623_infracfg_probe(struct udevice *dev)
 {
+	printf("%s\n", __func__);
+
 	return mtk_common_clk_gate_init(dev, &mt7623_clk_gate_tree,
 					infra_cgs);
 }
@@ -1069,17 +1077,23 @@ static const struct mtk_clk_tree mt7623_clk_peri_tree = {
 
 static int mt7623_pericfg_probe(struct udevice *dev)
 {
+	printf("%s\n", __func__);
+
 	return mtk_common_clk_infrasys_init(dev, &mt7623_clk_peri_tree);
 }
 
 static int mt7623_hifsys_probe(struct udevice *dev)
 {
+	printf("%s\n", __func__);
+
 	return mtk_common_clk_gate_init(dev, &mt7623_clk_gate_tree,
 					hif_cgs);
 }
 
 static int mt7623_ethsys_probe(struct udevice *dev)
 {
+	printf("%s\n", __func__);
+
 	return mtk_common_clk_gate_init(dev, &mt7623_clk_gate_tree,
 					eth_cgs);
 }
@@ -1087,6 +1101,9 @@ static int mt7623_ethsys_probe(struct udevice *dev)
 static int mt7623_ethsys_hifsys_bind(struct udevice *dev)
 {
 	int ret = 0;
+
+	printf("%s\n", __func__);
+
 
 #if CONFIG_IS_ENABLED(RESET_MEDIATEK)
 	ret = mediatek_reset_bind(dev, ETHSYS_HIFSYS_RST_CTRL_OFS, 1);
