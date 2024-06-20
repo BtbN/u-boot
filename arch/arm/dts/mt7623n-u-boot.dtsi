@@ -12,6 +12,11 @@
 		clocks = <&system_clk>;
 		clock-names = "system-clk";
 	};
+
+	wdt-reboot {
+		compatible = "wdt-reboot";
+		wdt = <&watchdog>;
+	};
 };
 
 &topckgen {
@@ -31,9 +36,11 @@
 };
 
 &uart2 {
+	assigned-clocks = <&pericfg CLK_PERI_UART2_SEL>;
+	assigned-clock-parents = <&topckgen CLK_TOP_UART_SEL>;
 	bootph-all;
-	reg-shift = <2>;
+	//reg-shift = <2>;
 	//linux use <&pericfg CLK_PERI_UART2_SEL> as first clock
-	clocks = <&topckgen CLK_TOP_UART_SEL>,
-		 <&pericfg CLK_PERI_UART2>;
+	//clocks = <&topckgen CLK_TOP_UART_SEL>,
+	//	 <&pericfg CLK_PERI_UART2>;
 };
