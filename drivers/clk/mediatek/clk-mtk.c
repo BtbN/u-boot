@@ -467,8 +467,8 @@ static ulong mtk_topckgen_get_rate(struct clk *clk)
 	int id = mtk_clk_get_id(clk);
 	ulong rate;
 
-	printf("GET RATE id:%d fdivs_offs:%d\n",id,priv->tree->fdivs_offs);
-	printf("fclks[id].rate:%ld\n",priv->tree->fclks[id].rate);
+	printf("GET RATE\n");
+
 	if (id < priv->tree->fdivs_offs)
 		rate = priv->tree->fclks[id].rate;
 	else if (id < priv->tree->muxes_offs)

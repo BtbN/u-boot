@@ -255,7 +255,6 @@ static int mtk_serial_of_to_plat(struct udevice *dev)
 		}
 	} else {
 		err = clk_get_rate(&priv->clk);
-		printf("%s:%d serial clock frequency:%d\n",__func__,__LINE__,err);
 		if (IS_ERR_VALUE(err)) {
 			dev_err(dev, "invalid baud clock\n");
 			return -EINVAL;
