@@ -364,7 +364,7 @@ static ulong mtk_find_parent_rate(struct mtk_clk_priv *priv, struct clk *clk,
 {
 	switch (flags & CLK_PARENT_MASK) {
 	case CLK_PARENT_XTAL:
-		return 0;
+		return priv->tree->xtal_rate;
 	case CLK_PARENT_TOPCKGEN:
 		return mtk_clk_find_parent_rate(clk, parent, priv->parent);
 	default:
@@ -394,7 +394,7 @@ static ulong mtk_infrasys_get_mux_rate(struct clk *clk, u32 off)
 
 	if (mux->parent[index] == CLK_XTAL &&
 	    !(priv->tree->flags & CLK_BYPASS_XTAL))
-		return 0;
+		return priv->tree->xtal_rate;
 
 	return mtk_find_parent_rate(priv, clk, mux->parent[index], mux->flags);
 }
