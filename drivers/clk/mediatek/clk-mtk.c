@@ -436,6 +436,12 @@ static ulong mtk_infrasys_get_rate(struct clk *clk)
 		gate = &priv->tree->gates[clk->id - priv->tree->gates_offs];
 		if (gate->flags & CLK_PARENT_TOPCKGEN)
 			parent = priv->parent;
+		/*
+		 * Assume xtal_rate to be declared if some gates have
+		 * XTAL as parent
+		*/
+		else if (gate->flags & CLK_PARENT_XTAL)
+			return priv->tree->xtal_rate;
 
 		rate = mtk_clk_find_parent_rate(clk, gate->parent, parent);
 	}
@@ -636,6 +642,12 @@ static ulong mtk_clk_gate_get_rate(struct clk *clk)
 	    parent->driver != DM_DRIVER_GET(mtk_clk_topckgen)) {
 		priv = dev_get_priv(parent);
 		parent = priv->parent;
+	/*
+	 * Assume xtal_rate to be declared if some gates have
+	 * XTAL as parent
+	 */
+	} else if (gate->flags & CLK_PARENT_XTAL) {
+		return priv->tree->xtal_rate;
 	}
 
 	return mtk_clk_find_parent_rate(clk, gate->parent, parent);
